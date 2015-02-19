@@ -51,16 +51,3 @@ func (p *WorkerPool) Run(cb func()) {
 		go w.Do(cb)
 	}
 }
-
-//example code
-func Foo() {
-	p := NewPool(50)
-	i := -1
-	p.Run(func(i int) func() {
-		return func() {
-			i += 1
-			fmt.Println(i)
-			time.Sleep(time.Duration(rand.Int31n(19000)) * time.Millisecond)
-		}
-	}(i))
-}
