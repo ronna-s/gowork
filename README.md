@@ -12,9 +12,9 @@
 ```go
 	workerPool := gowork.NewPool(100)
 	for w := range workerPool.Workers() {
-	  //you may use closures here - if it makes life simpler for you
+		//you may use closures here - if it makes life simpler for you
 		w.DoOnce(func() {
-		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
+			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		})
 	}
 ```
@@ -24,9 +24,9 @@
 ```go
 	workerPool := gowork.NewPool(100)
 	for w := range workerPool.Workers() {
-	  //you may use closures here - if it makes life simpler for you
+		//you may use closures here - if it makes life simpler for you
 		w.Do(func() {
-		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
+			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		})
 	}
 ```
@@ -37,12 +37,12 @@
 ```go
 	workerPool := gowork.NewPool(100)
 	for w := range workerPool.Workers() {
-	  //you may use closures here - if it makes life simpler for you
+		//you may use closures here - if it makes life simpler for you
 		w.Do(func() {
-		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
+			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		},
 		func(){
-		  fmt.Println("All 100 workers are not done - this message will be printed once")
+			fmt.Println("All 100 workers are not done - this message will be printed once")
 		})
 	}		
 ```
