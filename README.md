@@ -16,6 +16,7 @@
 		w.DoOnce(func() {
 		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		})
+	}
 ```
 
 ##### ... Set up a bunch of workers to run a block of code forever
@@ -27,10 +28,11 @@
 		w.Do(func() {
 		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		})
+	}
 ```
 
 
-##### ... Sync the workers and run another operation (both Do and DoOnce support this)
+##### ... Sync the workers and run another operation (both `Do` and `DoOnce` support this)
 
 ```go
 	workerPool := gowork.NewPool(100)
@@ -40,5 +42,6 @@
 		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		},func(){
 		})
+	}		
 ```
 
