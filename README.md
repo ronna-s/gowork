@@ -42,7 +42,7 @@
 			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		},
 		func(){
-			fmt.Println("All 100 workers are not done - this message will be printed once")
+			fmt.Println("All 100 workers are now done - this message will be printed once")
 		})
 	}		
 ```
