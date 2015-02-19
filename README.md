@@ -1,14 +1,14 @@
 # gowork
 
-##Set up a bunch of workers to execute your code in paralel while maintaining full control.
+#####Set up a bunch of workers to execute your code in paralel while maintaining full control.
 
-##Why?
+###Why?
 1. Simple API isnpired by some of the more common frameworks.
 1. No need for external tools (the option to configure external tools will be added)
 
-##How...
+###How...
 
-### ... To Set up a bunch of workers to run a block of code once
+##### ... To Set up a bunch of workers to run a block of code once
 ```go
 	workerPool := gowork.NewPool(100)
 	for w := range workerPool.Workers() {
@@ -18,7 +18,7 @@
 		})
 ```
 
-### ... To Set up a bunch of workers to run a block of code forever
+##### ... To Set up a bunch of workers to run a block of code forever
 
 ```go
 	workerPool := gowork.NewPool(100)
@@ -30,7 +30,7 @@
 ```
 
 
-### ... To sync the workers and run another operation (both Do and DoOnce support this)
+##### ... To sync the workers and run another operation (both Do and DoOnce support this)
 
 ```go
 	workerPool := gowork.NewPool(100)
