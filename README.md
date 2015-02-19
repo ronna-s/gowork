@@ -42,7 +42,7 @@
 		  time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		},
 		func(){
-		  fmt.Println("All 100 workers are not synced - this code is executed once")
+		  fmt.Println("All 100 workers are not done - this code is executed once")
 		})
 	}		
 ```
