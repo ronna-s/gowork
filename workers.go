@@ -48,6 +48,6 @@ func (p *WorkerPool) ReleaseWorker() {
 
 func (p *WorkerPool) Run(cb func()) {
 	for w := range p.ch {
-		go w.Do(cb)
+		w.Do(cb)
 	}
 }
