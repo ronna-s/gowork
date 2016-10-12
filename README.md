@@ -36,14 +36,14 @@ func main() {
 
 Can produce:
 ```
-Hello from 3
-Hello from 5
-Hello from 6
-Hello from 4
-Hello from 7
-Hello from 5
-Hello from 0
 Hello from 9
+Hello from 7
+Hello from 0
+Hello from 5
+Hello from 4
+Hello from 8
+Hello from 3
+Hello from 6
 Hello from 1
 Hello from 2
 ```
@@ -64,15 +64,19 @@ Hello from 2
 ##### ... Sync the workers to run another operation
 
 ```go
-	workerPool := gowork.NewPool(100)
-	for w := range workerPool.Workers() {
-		//you may use closures here - if it makes life simpler for you
-		w.Do(func() {
-			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
-		},
-		func(){
-			fmt.Println("All 100 workers are now done - this message will be printed once")
-		})
-	}		
+func main() {
+	pool := gowork.NewPool(2)
+	pool.GetWorker().Do(func() {
+		fmt.Println("Hello hello")
+	})
+	pool.GetWorker().Do(func() {
+		fmt.Println("Hello world")
+	})
+	pool.Sync()
+}		
 ```
-
+Produces:
+```
+Hello world
+Hello hello
+```
