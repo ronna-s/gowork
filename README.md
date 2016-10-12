@@ -12,7 +12,7 @@ go get github.com/ronna-s/gowork
 
 ###How...
 
-###### ... To run a job every x seconds (use IterateEvery)
+###### ... To run a job every x seconds use IterateEvery
 ```go
 gowork.IterateEvery(1).Run(func() {
 	fmt.Println("Hello world")
