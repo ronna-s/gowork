@@ -23,9 +23,7 @@ func NewPool(size int) *WorkerPool {
 	ch := make(chan *Worker, size)
 	p := WorkerPool{ch: ch, numWorkers: size}
 	for i := 0; i < size; i++ {
-		go func(i int) {
-			p.ch <- &Worker{pool: &p, Index: i}
-		}(i)
+		p.ch <- &Worker{pool: &p, Index: i}
 	}
 	return &p
 }
