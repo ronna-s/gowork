@@ -81,7 +81,7 @@ func (p *WorkerPool) RunInParallel(cb func()) {
 }
 func (p *WorkerPool) RunInParallelWithIndex(cb func(i int)) {
 	for i := 0; i < p.numWorkers; i++ {
-		p.GetWorker().DoWithIndex(cb, w.Index)
+		p.GetWorker().DoWithIndex(cb)
 	}
 	p.Sync()
 }
