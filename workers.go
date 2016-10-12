@@ -101,3 +101,15 @@ func (i *iterator) Run(cb func()) {
 		time.Sleep(time.Duration(sleepInterval) * time.Second)
 	}
 }
+func (i *iterator) RunWithIndex(cb func(i int)) {
+	for {
+		iterationStartTime := time.Now()
+		cb(i)
+		elapsedTime := int(time.Since(iterationStartTime).Seconds())
+		sleepInterval := i.minIterationInterval - elapsedTime
+		if sleepInterval < 0 {
+			sleepInterval = 0
+		}
+		time.Sleep(time.Duration(sleepInterval) * time.Second)
+	}
+}
