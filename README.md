@@ -21,24 +21,11 @@ gowork.IterateEvery(1).Run(func() {
 
 #### ... Setup a bunch of workers to run a block of code in parallel (RunInParallel or RunInParallelWithIndex)
 ```go
-package main
-
-import (
-	"fmt"
-	"math/rand"
-	"time"
-
-	"github.com/ronna-s/gowork"
-)
-
-func main() {
-	gowork.NewPool(10).RunInParallelWithIndex(func(i int) {
-		rand.Seed(time.Now().UTC().UnixNano())
-		time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
-		fmt.Println("Hello from", i)
-	})
-}
-
+gowork.NewPool(10).RunInParallelWithIndex(func(i int) {
+	rand.Seed(time.Now().UTC().UnixNano())
+	time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
+	fmt.Println("Hello from", i)
+})
 ```
 Can produce:
 ```
