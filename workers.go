@@ -1,7 +1,6 @@
 package gowork
 
 import (
-	"runtime"
 	"time"
 )
 
