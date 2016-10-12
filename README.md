@@ -12,16 +12,12 @@ go get github.com/ronna-s/gowork
 
 ###How to...
 
-##### ... Setup a job that your workers will just run forever
-
-func main() {
-	gowork.NewPool(10).RunWithIndex(func(i int) {
-		rand.Seed(time.Now().UTC().UnixNano())
-		time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
-		fmt.Println("Hello from", i)
-	})
-}
-
+##### ... Run a job every x seconds:
+```go
+gowork.IterateEvery(1).Run(func() {
+	fmt.Println("Hello world")
+})
+```
 
 #### ... Setup a bunch of workers to run a block of code in parallel (RunInParallel or RunInParallelWithIndex)
 ```go
