@@ -1,5 +1,9 @@
 # gowork
 
+```bash
+go get github.com/ronna-s/gowork
+```
+
 #####Set up a bunch of workers to execute your code in paralel while maintaining full control.
 
 ###Why?
@@ -7,6 +11,31 @@
 1. No need for external tools (the option to configure external tools will be added)
 
 ###How to...
+
+####Example
+
+
+```go
+package main
+
+import (
+	"fmt"
+	"math/rand"
+	"time"
+
+	"github.com/ronna-s/gowork"
+)
+
+func main() {
+	gowork.NewPool(100).RunInParallelWithIndex(func(i int) {
+		rand.Seed(time.Now().UTC().UnixNano())
+		time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
+		fmt.Println("Hello from", i)
+	})
+}
+
+```
+
 
 ##### ... Set up a bunch of workers to run a block of code once
 ```go
@@ -32,7 +61,7 @@
 ```
 
 
-##### ... Sync the workers and run another operation (both `Do` and `DoOnce` support this)
+##### ... Sync the workers and run another operation
 
 ```go
 	workerPool := gowork.NewPool(100)
