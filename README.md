@@ -12,7 +12,18 @@ go get github.com/ronna-s/gowork
 
 ###How to...
 
-####Setup a bunch of workers to run a block of code in parallel (RunInParallel or RunInParallelWithIndex)
+##### ... Setup a job that your workers will just run forever
+
+func main() {
+	gowork.NewPool(10).RunWithIndex(func(i int) {
+		rand.Seed(time.Now().UTC().UnixNano())
+		time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
+		fmt.Println("Hello from", i)
+	})
+}
+
+
+#### ... Setup a bunch of workers to run a block of code in parallel (RunInParallel or RunInParallelWithIndex)
 ```go
 package main
 
@@ -55,12 +66,11 @@ workerPool := gowork.NewPool(100)
 for w := range workerPool.Workers() {
 	//you may use closures here - if it makes life simpler for you
 	w.Do(func() {
+		rand.Seed(time.Now().UTC().UnixNano())
 		time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 	})
 }
 ```
-
-
 ##### ... Sync the workers to run another operation
 
 ```go
