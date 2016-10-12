@@ -61,14 +61,12 @@ func (p *WorkerPool) Sync() {
 	for i := 0; i < p.numWorkers; i++ {
 		workers[i] = p.GetWorker()
 	}
-	runtime.Gosched()
 	// release workers again
 	go func() {
 		for i := 0; i < p.numWorkers; i++ {
 			workers[i].release()
 		}
 	}()
-	runtime.Gosched()
 }
 func (p *WorkerPool) RunInParallel(cb func()) {
 	for i := 0; i < p.numWorkers; i++ {
