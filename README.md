@@ -43,14 +43,14 @@ Hello from 2
 #### ... and if you combine the two, you schedule a job with x workers to run every x seconds:
 ```go
 p := gowork.NewPool(10)
-	gowork.IterateEvery(1).Run(func() {
-		p.RunInParallelWithIndex(func(i int) {
-			rand.Seed(time.Now().UTC().UnixNano())
-			time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
-			fmt.Println("Hello from", i)
-		})
-		fmt.Println("==========")
+gowork.IterateEvery(1).Run(func() {
+	p.RunInParallelWithIndex(func(i int) {
+		rand.Seed(time.Now().UTC().UnixNano())
+		time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
+		fmt.Println("Hello from", i)
 	})
+	fmt.Println("==========")
+})
 ```
 #### ... Set up a bunch of workers to run a block of code forever
 
