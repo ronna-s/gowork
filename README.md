@@ -13,7 +13,7 @@
 	workerPool := gowork.NewPool(100)
 	for w := range workerPool.Workers() {
 		//you may use closures here - if it makes life simpler for you
-		w.DoOnce(func() {
+		w.Do(func() {
 			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
 		})
 	}
