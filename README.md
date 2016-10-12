@@ -51,13 +51,13 @@ Hello from 2
 ##### ... Set up a bunch of workers to run a block of code forever
 
 ```go
-	workerPool := gowork.NewPool(100)
-	for w := range workerPool.Workers() {
-		//you may use closures here - if it makes life simpler for you
-		w.Do(func() {
-			time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
-		})
-	}
+workerPool := gowork.NewPool(100)
+for w := range workerPool.Workers() {
+	//you may use closures here - if it makes life simpler for you
+	w.Do(func() {
+		time.Sleep(time.Duration(rand.Int31n(1000)) * time.Millisecond)
+	})
+}
 ```
 
 
