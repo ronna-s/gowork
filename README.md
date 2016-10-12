@@ -10,16 +10,16 @@ go get github.com/ronna-s/gowork
 1. Simple API isnpired by some of the more common frameworks.
 1. No need for external tools (the option to configure external tools will be added)
 
-###How to...
+###How...
 
-#### ... Run a job every x seconds:
+###### ... To run a job every x seconds (use IterateEvery)
 ```go
 gowork.IterateEvery(1).Run(func() {
 	fmt.Println("Hello world")
 })
 ```
 
-#### ... Setup a bunch of workers to run a block of code in parallel (RunInParallel or RunInParallelWithIndex)
+###### ... To setup a bunch of workers to run a block of code in parallel use RunInParallel or RunInParallelWithIndex
 ```go
 gowork.NewPool(10).RunInParallelWithIndex(func(i int) {
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -40,7 +40,7 @@ Hello from 6
 Hello from 1
 Hello from 2
 ```
-#### ... and if you combine the two, you schedule a job with x workers to run every x seconds:
+###### ... and if you combine the two, you schedule a job with x workers to run every x seconds:
 ```go
 p := gowork.NewPool(10)
 gowork.IterateEvery(1).Run(func() {
@@ -52,7 +52,7 @@ gowork.IterateEvery(1).Run(func() {
 	fmt.Println("==========")
 })
 ```
-#### ... Set up a bunch of workers to run a block of code forever
+###### ... to set up a bunch of workers to run a block of code forever range over Workers.
 
 ```go
 workerPool := gowork.NewPool(100)
@@ -64,7 +64,7 @@ for w := range workerPool.Workers() {
 	})
 }
 ```
-#### ... Sync the workers to run another operation
+###### ... to sync workers simply use Sync (similar to joinning threads)
 
 ```go
 func main() {
