@@ -1,37 +1,47 @@
-package gowork
+package main
 
 import (
-	"fmt"
-	"math/rand"
+	"runtime"
 	"time"
 )
 
 type (
 	Worker struct {
-		ch chan *Worker
+		pool  *WorkerPool
+		Index int
 	}
 	WorkerPool struct {
 		numWorkers int
 		ch         chan *Worker
 	}
+	iterator struct {
+		minIterationInterval int
+	}
 )
 
 func NewPool(size int) *WorkerPool {
-	ch := make(chan *Worker)
+
+	ch := make(chan *Worker, size)
+	p := WorkerPool{ch: ch, numWorkers: size}
 	for i := 0; i < size; i++ {
-		go func() { ch <- &Worker{ch} }()
+		go func(i int) {
+			p.ch <- &Worker{pool: &p, Index: i}
+		}(i)
 	}
-	return &WorkerPool{ch: ch}
+	return &p
 }
 
 func (w *Worker) Do(cb func()) {
-	cb()
-	go func() { w.ch <- w }()
+	go func() {
+		cb()
+		w.release()
+	}()
 }
 
 //waits until a worker is available
 func (p *WorkerPool) GetWorker() *Worker {
-	return <-p.ch
+	w := <-p.ch
+	return w
 }
 
 //waits until a worker is available
@@ -40,14 +50,48 @@ func (p *WorkerPool) Workers() <-chan *Worker {
 }
 
 //releases
-func (p *WorkerPool) ReleaseWorker() {
-	go func() {
-		p.ch <- &Worker{ch: p.ch}
-	}()
+func (w *Worker) release() {
+	w.pool.ch <- w
 }
 
-func (p *WorkerPool) Run(cb func()) {
-	for w := range p.ch {
-		w.Do(cb)
+func (p *WorkerPool) Sync() {
+
+	workers := make([]*Worker, p.numWorkers)
+	// obtained all the workers - all done
+	for i := 0; i < p.numWorkers; i++ {
+		workers[i] = p.GetWorker()
+	}
+	runtime.Gosched()
+	// release workers again
+	go func() {
+		for i := 0; i < p.numWorkers; i++ {
+			workers[i].release()
+		}
+	}()
+	runtime.Gosched()
+}
+func (p *WorkerPool) RunInParallel(cb func()) {
+	for i := 0; i < p.numWorkers; i++ {
+		p.GetWorker().Do(cb)
+	}
+	p.Sync()
+}
+
+func (p *WorkerPool) Size() int {
+	return p.numWorkers
+}
+func IterateEvery(minIterationInterval int) *iterator {
+	return &iterator{minIterationInterval: minIterationInterval}
+}
+func (i *iterator) Run(cb func()) {
+	for {
+		iterationStartTime := time.Now()
+		cb()
+		elapsedTime := int(time.Since(iterationStartTime).Seconds())
+		sleepInterval := i.minIterationInterval - elapsedTime
+		if sleepInterval < 0 {
+			sleepInterval = 0
+		}
+		time.Sleep(time.Duration(sleepInterval) * time.Second)
 	}
 }
