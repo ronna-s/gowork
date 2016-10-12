@@ -36,6 +36,12 @@ func (w *Worker) Do(cb func()) {
 		w.release()
 	}()
 }
+func (w *Worker) DoWithIndex(cb func(int i)) {
+	go func() {
+		cb(w.Index)
+		w.release()
+	}()
+}
 
 //waits until a worker is available
 func (p *WorkerPool) GetWorker() *Worker {
@@ -73,7 +79,12 @@ func (p *WorkerPool) RunInParallel(cb func()) {
 	}
 	p.Sync()
 }
-
+func (p *WorkerPool) RunInParallelWithIndex(cb func(i int)) {
+	for i := 0; i < p.numWorkers; i++ {
+		p.GetWorker().DoWithIndex(cb, w.Index)
+	}
+	p.Sync()
+}
 func (p *WorkerPool) Size() int {
 	return p.numWorkers
 }
