@@ -36,7 +36,7 @@ func (w *Worker) Do(cb func()) {
 		w.release()
 	}()
 }
-func (w *Worker) DoWithIndex(cb func(int i)) {
+func (w *Worker) DoWithIndex(cb func(i int)) {
 	go func() {
 		cb(w.Index)
 		w.release()
