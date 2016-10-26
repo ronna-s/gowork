@@ -5,36 +5,36 @@ import (
 )
 
 type (
-	Worker struct {
-		pool  *WorkerPool
+	worker struct {
+		pool  *workerPool
 		Index int
 	}
-	WorkerPool struct {
+	workerPool struct {
 		numWorkers int
-		ch         chan *Worker
+		ch         chan *worker
 	}
 	iterator struct {
 		minIterationInterval int
 	}
 )
 
-func NewPool(size int) *WorkerPool {
+func NewPool(size int) *workerPool {
 
-	ch := make(chan *Worker, size)
-	p := WorkerPool{ch: ch, numWorkers: size}
+	ch := make(chan *worker, size)
+	p := workerPool{ch: ch, numWorkers: size}
 	for i := 0; i < size; i++ {
-		p.ch <- &Worker{pool: &p, Index: i}
+		p.ch <- &worker{pool: &p, Index: i}
 	}
 	return &p
 }
 
-func (w *Worker) Do(cb func()) {
+func (w *worker) Do(cb func()) {
 	go func() {
 		cb()
 		w.release()
 	}()
 }
-func (w *Worker) DoWithIndex(cb func(i int)) {
+func (w *worker) DoWithIndex(cb func(i int)) {
 	go func() {
 		cb(w.Index)
 		w.release()
@@ -42,24 +42,24 @@ func (w *Worker) DoWithIndex(cb func(i int)) {
 }
 
 //waits until a worker is available
-func (p *WorkerPool) GetWorker() *Worker {
+func (p *workerPool) GetWorker() *worker {
 	w := <-p.ch
 	return w
 }
 
 //waits until a worker is available
-func (p *WorkerPool) Workers() <-chan *Worker {
+func (p *workerPool) Workers() <-chan *worker {
 	return p.ch
 }
 
 //releases
-func (w *Worker) release() {
+func (w *worker) release() {
 	w.pool.ch <- w
 }
 
-func (p *WorkerPool) Sync() {
+func (p *workerPool) Sync() {
 
-	workers := make([]*Worker, p.numWorkers)
+	workers := make([]*worker, p.numWorkers)
 	// obtained all the workers - all done
 	for i := 0; i < p.numWorkers; i++ {
 		workers[i] = p.GetWorker()
@@ -71,19 +71,19 @@ func (p *WorkerPool) Sync() {
 		}
 	}()
 }
-func (p *WorkerPool) RunInParallel(cb func()) {
+func (p *workerPool) RunInParallel(cb func()) {
 	for i := 0; i < p.numWorkers; i++ {
 		p.GetWorker().Do(cb)
 	}
 	p.Sync()
 }
-func (p *WorkerPool) RunInParallelWithIndex(cb func(i int)) {
+func (p *workerPool) RunInParallelWithIndex(cb func(i int)) {
 	for i := 0; i < p.numWorkers; i++ {
 		p.GetWorker().DoWithIndex(cb)
 	}
 	p.Sync()
 }
-func (p *WorkerPool) Size() int {
+func (p *workerPool) Size() int {
 	return p.numWorkers
 }
 func IterateEvery(minIterationInterval int) *iterator {
