@@ -26,6 +26,8 @@ gowork.NewPool(10).RunInParallelWithIndex(func(i int) {
 	time.Sleep(time.Duration(rand.Int31n(10)) * time.Millisecond)
 	fmt.Println("Hello from", i)
 })
+fmt.Println("Hello I'm done")
+
 ```
 Can produce:
 ```
@@ -39,7 +41,9 @@ Hello from 3
 Hello from 6
 Hello from 1
 Hello from 2
+Hello I'm done
 ```
+RunInParlalle and RunInParallelWithIndex will wait (Sync) until all workers have finished.
 ###### ... and if you combine the two, you schedule a job with x workers to run every x seconds:
 ```go
 p := gowork.NewPool(10)
