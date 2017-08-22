@@ -68,19 +68,33 @@ for w := range workerPool.Workers() {
 	})
 }
 ```
-###### ... to sync workers simply use Sync (similar to joinning threads)
+###### ... get rid of WaitGroups - simply use Sync()
 
 ```go
 func main() {
-	pool := gowork.NewPool(2)
-	pool.GetWorker().Do(func() {
-		fmt.Println("Hello hello")
+	p := gowork.NewPool(2)
+
+	p.GetWorker().Do(func() {
+		fmt.Println("Hello from 1")
 	})
-	pool.GetWorker().Do(func() {
-		fmt.Println("Hello world")
+
+	p.GetWorker().Do(func() {
+		fmt.Println("Hello from 2")
 	})
-	pool.Sync()
-}		
+	//wait - what? but we only have 2 worker
+	p.GetWorker().Do(func() {
+		fmt.Println("Hello from 3")
+	})
+
+	p.GetWorker().Do(func() {
+		fmt.Println("Hello from 4")
+	})
+
+	fmt.Println("hello from foo")
+
+	p.Sync()
+	fmt.Println("all workers are done")
+}
 ```
 Produces:
 ```
