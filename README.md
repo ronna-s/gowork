@@ -44,7 +44,8 @@ Hello from 2
 Hello I'm done
 ```
 RunInParlalle and RunInParallelWithIndex will wait (Sync) until all workers have finished.
-###### ... and if you combine the two, you schedule a job with x workers to run every x seconds:
+
+###### If you combine the two, you schedule a job with x workers to run every x seconds:
 If the workers are not done in time, the next iteration will start immediately after the last worker is done.
 ```go
 p := gowork.NewPool(10)
